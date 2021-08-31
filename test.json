@@ -1,0 +1,72 @@
+{
+    "fullPath": "/blogs",
+    "path": "/blogs",
+    "query": {},
+    "hash": "",
+    "name": "Blogs",
+    "params": {},
+    "matched": [
+        {
+            "path": "/blogs",
+            "name": "Blogs",
+            "meta": {},
+            "props": {
+                "default": false
+            },
+            "children": [],
+            "instances": {
+                "default": {
+                    "sampleBlogCards": [
+                        {
+                            "blogTitle": "Blog Card #1",
+                            "blogCoverPhoto": "stock-1",
+                            "blogDate": "2021/08/01"
+                        },
+                        {
+                            "blogTitle": "Blog Card #2",
+                            "blogCoverPhoto": "stock-2",
+                            "blogDate": "2021/08/01"
+                        },
+                        {
+                            "blogTitle": "Blog Card #3",
+                            "blogCoverPhoto": "stock-3",
+                            "blogDate": "2021/08/01"
+                        },
+                        {
+                            "blogTitle": "Blog Card #4",
+                            "blogCoverPhoto": "stock-4",
+                            "blogDate": "2021/08/01"
+                        }
+                    ],
+                    "editPost": null
+                }
+            },
+            "leaveGuards": {
+                "Set(0)": []
+            },
+            "updateGuards": {
+                "Set(0)": []
+            },
+            "enterCallbacks": {},
+            "components": {
+                "default": {
+                    "components": {
+                        "BlogCard": {
+                            "props": [
+                                "post"
+                            ],
+                            "__scopeId": "data-v-fdeb35fc",
+                            "__file": "C:/Users/liujiaqi/桌面/project/FireBlogs_Vue3/src/components/BlogCard.vue",
+                            "__hmrId": "fdeb35fc"
+                        }
+                    },
+                    "__scopeId": "data-v-e28aca72",
+                    "__file": "C:/Users/liujiaqi/桌面/project/FireBlogs_Vue3/src/views/Blogs.vue",
+                    "__hmrId": "e28aca72"
+                }
+            }
+        }
+    ],
+    "meta": {},
+    "href": "/blogs"
+}

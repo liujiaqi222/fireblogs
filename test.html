@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        input[type="checkbox"] {
+            position: relative;
+            border: none;
+            appearance: none;
+            background: #fff;
+            outline: none;
+            width: 80px;
+            height: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        input[type="checkbox"]::before {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 0;
+            left: 0;
+            background-color: #303030;
+            transform: scale(1.1);
+            border-radius: 20px;
+            transition: 750ms ease all;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        input:checked[type="checkbox"]::before {
+            background-color: #fff;
+            left: 52px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="checkbox">
+</body>
+
+</html>
