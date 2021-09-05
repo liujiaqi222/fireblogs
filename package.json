@@ -7,7 +7,10 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "vite-plugin-svg-component": "^1.1.1",
+    "@tiptap/starter-kit": "^2.0.0-beta.101",
+    "@tiptap/vue-3": "^2.0.0-beta.56",
+    "firebase": "^8.7.1",
+    "quill": "^1.3.7",
     "vue": "^3.0.5",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2"

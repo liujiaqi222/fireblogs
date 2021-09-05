@@ -1,23 +1,23 @@
 <template>
-  <div class="blog-wrapper no-user">
+  <div class="blog-wrapper " :class="{'no-user':!$store.state.user}">
     <div class="blog-content">
       <div>
         <!-- 判断是否为欢迎帖子 -->
         <h2 v-if="post.welcomeScreen">{{ post.title }}</h2>
-        <h2 v-else>{{ post.title }}</h2>
+        <h2 v-else>{{ post.blogTitle }}</h2>
         <p v-if="post.welcomeScreen">{{ post.blogPost }}</p>
-        <p v-else class="content-preivew">{{ post.blogHTML }}</p>
+        <!-- <p v-else class="content-preivew" v-html="post.blogHTML.slice(0,100)"></p> -->
         <router-link v-if="post.welcomeScreen" class="link link-light" to="#">
           <i class="fas fa-arrow-right arrow-light arrow"></i>登录/注册
         </router-link>
-        <router-link v-else class="link" to="#">
+        <router-link v-else class="link test2" :to="`/view-blog/${post.blogId}`" >
           <i class="fas fa-arrow-right arrow"></i>查看帖子
         </router-link>
       </div>
     </div>
     <div class="blog-photo">
       <img v-if="post.welcomeScreen" :src="getImageUrl(post.photo)" alt="" />
-      <img v-else :src="getImageUrl(post.blogCoverPhoto)" alt="" />
+      <img v-else :src="post.blogCoverPhoto" alt="" />
     </div>
   </div>
 </template>

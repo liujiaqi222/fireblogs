@@ -1,23 +1,46 @@
 <template>
   <div class="blog-card">
-    <div class="icons" v-show='$store.state.editPost'>
-      <div class="icon"><i class="edit fas fa-edit"></i></div>
-      <div class="icon"><i class="delete fas fa-trash-alt"></i></div>
+    <div class="icons" v-show="$store.state.editPost">
+      <div class="icon" @click="deletePost">
+        <i class="delete fas fa-trash-alt"></i>
+      </div>
+      <div class="icon" @click="editPost"><i class="edit fas fa-edit"></i></div>
     </div>
-    <img :src="`/src/assets/blogCards/${post.blogCoverPhoto}.jpg`" alt="" />
+    <img :src="post.blogCoverPhoto" alt="" />
     <div class="info">
       <h4>{{ post.blogTitle }}</h4>
-      <h6>发布日期：{{ post.blogDate }}</h6>
-      <router-link class="link" to="#">
+      <h6>
+        发布日期：{{
+          new Date(post.blogDate).toLocaleString("zh-cn", { dateStyle: "long" })
+        }}
+      </h6>
+      <router-link
+        class="link test"
+        :to="{ name: 'ViewBlog', params: { blogId: post.blogId } }"
+      >
         查看文章<i class="icon fas fa-arrow-right arrow"></i>
       </router-link>
     </div>
   </div>
 </template>
 
-<script setup>
-
-defineProps(["post"]);
+<script>
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+export default {
+  props: ["post"],
+  setup(props) {
+    const store = useStore();
+    function deletePost() {
+      store.dispatch("deletePost", props.post.blogId);
+    }
+    const router = useRouter();
+    function editPost() {
+      router.push({ name: "EditBlog", params: { blogId: props.post.blogId } });
+    }
+    return { deletePost, editPost };
+  },
+};
 </script>
 
 <style lang='scss' scoped>
@@ -107,5 +130,4 @@ defineProps(["post"]);
     }
   }
 }
-
 </style>

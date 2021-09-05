@@ -21,11 +21,12 @@
             <use xlink:href="#icon-suo"></use>
           </svg>
         </div>
+        <div class="error" v-if="error">{{ errorMessage }}</div>
       </div>
       <router-link :to="{ name: 'ForgotPassword' }" class="forgot-password"
         >忘记了密码？</router-link
       >
-      <button>登录</button>
+      <button @click.prevent="signIn">登录</button>
       <div class="angle"></div>
     </form>
     <div class="background"></div>
@@ -34,11 +35,51 @@
 
 <script>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   setup() {
     let password = ref("");
     let email = ref("");
-    return { password, email };
+    let error = ref("");
+    let errorMessage = ref("");
+    const router = useRouter();
+
+    function signIn() {
+      if (email.value === "" || password.value === "") {
+        error.value = true;
+        errorMessage.value = "请填写所有的输入框！";
+        return;
+      }
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email.value, password.value)
+        .then(() => {
+          router.push({ name: "Home" });
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+          error.value = false;
+          // console.log(firebase.auth().currentUser.uid);
+        })
+        .catch((err) => {
+          error.value = true;
+          if (err.message === "The email address is badly formatted.") {
+            return (errorMessage.value = "请输入正确的邮箱");
+          }
+          if (
+            err.message ===
+              "The password is invalid or the user does not have a password." ||
+            err.message ===
+              "There is no user record corresponding to this identifier. The user may have been deleted."
+          ) {
+            return (errorMessage.value = "密码或者账号不正确");
+          }
+          errorMessage.value = err.message;
+        });
+    }
+    return { password, email, error, errorMessage, signIn };
   },
 };
 </script>
@@ -101,9 +142,9 @@ export default {
           }
         }
         .icon {
-          width: 1.5rem;
+          width: 1rem;
           position: absolute;
-          left: 4px;
+          left: 8px;
         }
       }
     }
@@ -120,9 +161,9 @@ export default {
         border-color: #303030;
       }
     }
-    button{
-        margin-top: 12px;
-        width: 120px;
+    button {
+      margin-top: 12px;
+      width: 120px;
     }
     .angle {
       display: none;

@@ -31,8 +31,8 @@
           <ul>
             <router-link class="link" :to='{name:"Home"}'>首页</router-link>
             <router-link class="link" :to='{name:"Blogs"}'>博客</router-link>
-            <router-link class="link" to="#">发文章</router-link>
-            <router-link class="link" :to='{name:"Login"}'>登录/注册</router-link>
+            <router-link class="link" :to="{ name: 'CreatePost' }" v-if="$store.state.isAdmin">发文章</router-link>
+            <router-link class="link" :to='{name:"Login"}' v-if='!$store.state.user'>登录/注册</router-link>
           </ul>
         </div>
       </div>

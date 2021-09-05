@@ -13,7 +13,6 @@
       />
     </div>
   </div>
-  {{ $router.currentRoute['fullPath']}}
 </template>
 
 <script>
@@ -31,7 +30,7 @@ export default {
 
 
     return {
-      sampleBlogCards: computed(() => store.state.sampleBlogCards),
+      sampleBlogCards: computed(() => store.state.blogPosts),
       editPost:computed({
         get(){
           return store.state.editPost;
