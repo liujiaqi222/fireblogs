@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <blog-post :post="welcomeScreen" />
+    <blog-post :post="welcomeScreen"  v-if='!$store.state.user'/>
     <blog-post
-      v-for="(post, index) in sampleBlogPost"
+      v-for="(post, index) in blogPostsFeed"
       :post="post"
       :key="index"
     />
@@ -12,13 +12,13 @@
         <div class="blog-cards">
           <blog-card
             :post="post"
-            v-for="(post, index) in sampleBlogCards"
+            v-for="(post, index) in blogPostsCards"
             :key="index"
           />
         </div>
       </div>
     </div>
-    <div class="updates">
+    <div class="updates" v-if='!$store.state.user'>
       <div class="container">
         <h2>再也不错过任何一篇文章。 今天就免费注册一个账号！</h2>
         <router-link class="router-button" to="#">
@@ -28,6 +28,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -41,7 +42,6 @@ export default {
   components: { BlogPost, BlogCard },
   setup() {
     const store = useStore();
-
     let welcomeScreen = reactive({
       title: "Welcome!",
       blogPost:
@@ -49,24 +49,13 @@ export default {
       welcomeScreen: true,
       photo: "coding",
     });
-
-    let sampleBlogPost = reactive([
-      {
-        title: "标题-------",
-        blogHTML: "内容填充内容填ffffff",
-        blogCoverPhoto: "beautiful-stories",
-      },
-      {
-        title: "!!!!标题",
-        blogHTML: "!!!!内容填充内容填充-",
-        blogCoverPhoto: "designed-for-everyone",
-      },
-    ]);
-
+    let blogPostsFeed = computed(()=>store.getters.blogPostsFeed)
+    let blogPostsCards = computed(() => store.getters.blogPostsCards);
+    
     return {
       welcomeScreen,
-      sampleBlogPost,
-      sampleBlogCards: computed(() => store.state.sampleBlogCards),
+      blogPostsCards,
+      blogPostsFeed
     };
   },
 };

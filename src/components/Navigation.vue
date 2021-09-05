@@ -22,9 +22,47 @@
             :class="{ active: $route.path == '/blogs' ? true : false }"
             >博客</router-link
           >
-          <router-link class="link" to="#">发文章</router-link>
-          <router-link class="link"  :to="{ name: 'Login' }" >登录/注册</router-link>
+          <router-link class="link" :to="{ name: 'CreatePost' }" :class="{ active: $route.path == '/CreatePost' ? true : false }" v-if="$store.state.isAdmin">发文章</router-link>
+          <router-link class="link" :to="{ name: 'Login' }" v-if='!$store.state.user'
+            >登录/注册</router-link
+          >
         </ul>
+        <div class="profile" ref="profile" @click="toggleProfileMenu" v-if='$store.state.user'>
+          <span style='font-size:8px'>{{ $store.state.profileName }}</span>
+          <div class="profile-menu" v-show="profileMenu">
+            <div class="info">
+              <p class="name">{{ $store.state.profileName }}</p>
+              <div class="right">
+                <p>{{ $store.state.profileUserName }}</p>
+                <p>{{ $store.state.profileEmail }}</p>
+              </div>
+            </div>
+            <div class="options">
+              <div class="option">
+                <router-link :to="{name:'Profile'}" class="option">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-Serviceusers"></use>
+                  </svg>
+                  <p>账号设置</p>
+                </router-link>
+              </div>
+              <div class="option" v-if="$store.state.isAdmin">
+                <router-link :to="{name:'Admin'}" class="option">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-admin"></use>
+                  </svg>
+                  <p>管理员主页</p>
+                </router-link>
+              </div>
+              <div class="option" @click="signOut">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-log-out"></use>
+                  </svg>
+                  <p>退出登录</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
     <!-- 菜单图标 -->
@@ -35,7 +73,7 @@
         <router-link
           class="link"
           :to="{ name: 'Home' }"
-          :class="{active: $route.path === '/'? true : false  }"
+          :class="{ active: $route.path === '/' ? true : false }"
           >首页</router-link
         >
         <router-link
@@ -44,16 +82,20 @@
           :class="{ active: $route.path == '/blogs' ? true : false }"
           >博客</router-link
         >
-        <router-link class="link" to="#" >发文章</router-link>
-        <router-link class="link" :to="{ name: 'Login' }">登录/注册</router-link>
+        <router-link class="link" to="#" v-if="$store.state.isAdmin"  :class="{ active: $route.path == '/CreatePost' ? true : false }">发文章</router-link>
+        <router-link class="link" :to="{ name: 'Login' }" v-if='!$store.state.user'
+          >登录/注册</router-link
+        >
       </ul>
     </transition>
   </header>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref,computed } from "vue";
 import { useRoute } from "vue-router";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   setup() {
     const route = useRoute();
@@ -77,7 +119,20 @@ export default {
     function toggleMobileNav() {
       mobileNav.value = !mobileNav.value;
     }
-    return { mobile, mobileNav, myMask, toggleMobileNav };
+
+    let profileMenu = ref(null);
+    let profile = ref(null);
+    function toggleProfileMenu(e){
+      if(e.target === profile.value){
+        profileMenu.value =!profileMenu.value;
+      }
+    }
+
+    function signOut(){
+      firebase.auth().signOut();
+      window.location.reload();
+    }
+    return { mobile, mobileNav, myMask, toggleMobileNav,profileMenu ,toggleProfileMenu,profile,signOut};
   },
 };
 </script>
@@ -119,6 +174,78 @@ header {
       ul {
         .link {
           margin-right: 32px;
+        }
+      }
+      .profile {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        color: #fff;
+        background-color: #303030;
+        span{
+          pointer-events: none;
+        }
+      }
+      .profile-menu {
+        position: absolute;
+        top: 60px;
+        z-index: 888;
+        right: 0;
+        width: 250px;
+        background-color: #303030;
+        box-shadow: 0 4px 6px rgba($color: #000000, $alpha: 0.1),
+          0 2px 4px -1px rgba($color: #000000, $alpha: 0.06);
+        .info {
+          display: flex;
+          align-items: center;
+          padding: 15px;
+          border-bottom: 1px solid #fff;
+          .name {
+            position: initial;
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color: #303030;
+          }
+          .right {
+            flex: 1;
+            margin-left: 24px;
+            p:nth-child(1) {
+              font-size: 14px;
+            }
+          }
+        }
+        .options {
+          padding: 15px;
+          .option {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            .icon {
+              width: 18px;
+              height: 18px;
+              fill: white;
+            }
+            p {
+              font-size: 14px;
+              margin-left: 12px;
+            }
+          }
+          .option:last-child{
+            margin-bottom: 0;
+          }
         }
       }
     }
@@ -174,8 +301,9 @@ header {
   transform: translateX(0);
 }
 
-header .container .active, header .mobile-nav .active {
-  color:rgb(248, 96, 79);
-  font-weight:600;
+header .container .active,
+header .mobile-nav .active {
+  color: rgb(248, 96, 79);
+  font-weight: 600;
 }
 </style>

@@ -9,13 +9,17 @@
 <script>
 import Navigation from "./components/Navigation.vue";
 import MyFooter from "./components/Footer.vue";
+import { useStore } from "vuex";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   components: { Navigation, MyFooter },
   setup() {
     let navigationDisabled = ref(null);
     const route = useRoute();
+    const store = useStore();
     function checkRoute() {
       if (
         route.name === "Login" ||
@@ -26,8 +30,18 @@ export default {
       }
       navigationDisabled.value = false;
     }
+
     onMounted(() => {
       checkRoute(); // 当页面加载完毕时 才能读取出route.name
+    });
+
+    firebase.auth().onAuthStateChanged((user) => {
+      // 获取post
+      store.commit("updateUser", user);
+      store.dispatch("getPosts");
+      if (user) {
+        store.dispatch("getCurrentUser");
+      }
     });
 
     // 实时监控route的变化
@@ -158,4 +172,9 @@ button,
   }
 }
 
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
 </style>
