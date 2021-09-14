@@ -1,9 +1,9 @@
 <template>
   <div class="blog-card-wrap">
     <div class="blog-cards container">
-      <div class="toggleEdit">
-        <span v-show = '!$store.state.editPost'>点击显示编辑按钮</span>
-        <span v-show = '$store.state.editPost'>点击关闭编辑按钮</span>
+      <div class="toggleEdit" v-if="$store.state.isAdmin">
+        <span v-show="!$store.state.editPost">点击显示编辑按钮</span>
+        <span v-show="$store.state.editPost">点击关闭编辑按钮</span>
         <input type="checkbox" v-model="editPost" id="checkbox" />
       </div>
       <blog-card
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { computed , onBeforeUnmount} from "vue";
+import { computed, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import BlogCard from "../components/BlogCard.vue";
 
@@ -24,20 +24,19 @@ export default {
   components: { BlogCard },
   setup() {
     const store = useStore();
-    onBeforeUnmount(()=>{
-      store.commit('toggleEditPost',false)
-    })
-
+    onBeforeUnmount(() => {
+      store.commit("toggleEditPost", false);
+    });
 
     return {
       sampleBlogCards: computed(() => store.state.blogPosts),
-      editPost:computed({
-        get(){
+      editPost: computed({
+        get() {
           return store.state.editPost;
         },
-        set(payload){
-          store.commit('toggleEditPost',payload);
-        }
+        set(payload) {
+          store.commit("toggleEditPost", payload);
+        },
       }),
     };
   },
@@ -53,9 +52,9 @@ export default {
     position: absolute;
     top: -70px;
     right: 0;
-    span{
+    span {
       margin-right: 10px;
-      color:#555;
+      color: #555;
       letter-spacing: 2px;
     }
     input[type="checkbox"] {

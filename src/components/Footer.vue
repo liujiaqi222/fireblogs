@@ -7,22 +7,22 @@
           <ul>
             <li>
               <a href="#" class="icon">
-                <i class="fab fa-twitter"></i>
+                <i class="iconfont icon-weibo"></i>
               </a>
             </li>
             <li>
               <a href="#" class="icon">
-                <i class="fab fa-instagram"></i>
+                <i class="iconfont icon-bilibili1"></i>
               </a>
             </li>
             <li>
-              <a href="#" class="icon">
+              <a href="https://github.com/liujiaqi222/fireblogs" class="icon" target="_blank">
                 <i class="fab fa-github"></i>
               </a>
             </li>
             <li>
               <a href="#" class="icon">
-                <i class="fab fa-youtube"></i>
+                <i class="iconfont icon-shuyi_weixin"></i>
               </a>
             </li>
           </ul>
@@ -149,5 +149,13 @@ footer {
       }
     }
   }
+}
+.iconfont{
+  font-size: 1.5rem;
+  text-decoration: none;
+  color:white;
+}
+a{
+  text-decoration: none;
 }
 </style>

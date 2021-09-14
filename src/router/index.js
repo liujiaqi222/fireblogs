@@ -40,30 +40,27 @@ router.beforeEach((to, from, next) => {
     next();
 })
 
-
 let admin = null;
-router.beforeEach(async (to, from, next) => {
-    let user = firebase.auth().currentUser;
-    if (user) {
+let user = null;
+firebase.auth().onAuthStateChanged((userLogin) => {
+    if (userLogin) {
+        user = true;
         const dataBase = db.collection("users").doc(firebase.auth().currentUser.uid);
         dataBase.get().then(doc => {
             admin = doc.data().isAdmin;
-            console.log('isAdmin', admin);
         });
-        setTimeout(() => {
-            console.log('test isAdmin', admin);
-
-        }, 0);
+    }else{
+        user = false;
+        admin = false;
     }
-    console.log(to.matched.some((res) => res.meta.requiresAuth), 'requiresAuth');
+});
+
+
+router.beforeEach(async (to, from, next) => {
     if (to.matched.some((res) => res.meta.requiresAuth)) {
         if (user) {
-            console.log(to.matched.some((res) => res.meta.requiresAdmin));
             if (to.matched.some((res) => res.meta.requiresAdmin)) {
-                console.log('requiresAdmin');
-                console.log('admin', admin, 'final');
                 if (admin) {
-                    console.log(999);
                     return next();
                 }
                 return next({ name: "Home" });
